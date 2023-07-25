@@ -20,7 +20,9 @@ class AppClient {
     bool validateResponseFormat = true,
   }) async {
     try {
-      Map<String, String> headers = {};
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+      };
 
       headers.addAll({});
 
@@ -31,10 +33,14 @@ class AppClient {
 
       var response = await client.get(uri, headers: headers);
       await _validateResponseStatus(uri.toString(), response);
+      Map<String, dynamic> json = {};
+      if (response.body.isEmpty) return json;
 
-      var json = jsonDecode(response.body);
+      if (response.body.isNotEmpty) {
+        json = jsonDecode(response.body);
+      }
 
-      if (validateResponseFormat) _validateResponsePattern(json);
+      // if (validateResponseFormat) _validateResponsePattern(json);
 
       return json;
     } catch (error) {

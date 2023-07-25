@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:valve_controller/controller/home_controller.dart';
+import 'package:valve_controller/util/alert_util.dart';
+import 'package:valve_controller/util/exception_handler.dart';
 import 'package:valve_controller/view_log_screen.dart';
 
 DateTime scheduleTime = DateTime.now();
@@ -17,6 +19,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final homeScreenController = HomeScreenController();
   @override
+  void initState() {
+    super.initState();
+    homeScreenController.getinit();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -28,36 +36,72 @@ class _HomeScreenState extends State<HomeScreen> {
               fontSize: 16,
             )),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _buttonSwicthOnOff(),
-              _buttonSwicthMode(),
-              _buttonSwicthLog()
-            ],
+      body: SingleChildScrollView(
+        child: Obx(
+          () => Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                if (homeScreenController.isLoading.value) ...[
+                  const SizedBox(height: 100),
+                  const Center(
+                    child: SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: CircularProgressIndicator(
+                        value: null,
+                        strokeWidth: 5.0,
+                      ),
+                    ),
+                  ),
+                ] else ...[
+                  homeScreenController.switchVale.value
+                      ? _iconStatusON()
+                      : _iconStatusOFF(),
+                  const SizedBox(height: 20),
+                  _buttonSwicthOnOff(),
+                  _buttonSwicthMode(),
+                  _buttonSwicthLog()
+                ]
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
+  Widget _iconStatusON() {
+    return SizedBox(height: 100, child: Image.asset('assets/accept.png'));
+  }
+
+  Widget _iconStatusOFF() {
+    return SizedBox(height: 100, child: Image.asset('assets/cross.png'));
+  }
+
   Widget _buttonSwicthOnOff() {
-    return Obx(
-      () => Card(
-        elevation: 3,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        color: Colors.white,
-        child: TextButton(
-          onPressed: () {
-            homeScreenController
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      color: Colors.white,
+      child: TextButton(
+        onPressed: () async {
+          if (homeScreenController.configuration.functionMode == 1) {
+            await homeScreenController
                 .changeSwitchVale(homeScreenController.switchVale.value);
-          },
-          child: Padding(
+          } else {
+            return AlertUtil.showError(
+                title: 'Notify',
+                message: "You can't control the vale",
+                showCloseButton: false);
+          }
+        },
+        child: Obx(
+          () => Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
@@ -112,12 +156,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget autoButton() {
-    return Obx(
-      () => TextButton(
-        onPressed: () {
-          homeScreenController.setSwitchModeAuto();
-        },
-        child: Column(
+    return TextButton(
+      onPressed: () async {
+        await homeScreenController.setAutoMode();
+      },
+      child: Obx(
+        () => Column(
           children: [
             Container(
                 padding: const EdgeInsets.all(16.0),
@@ -153,12 +197,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget manualButton() {
-    return Obx(
-      () => TextButton(
-        onPressed: () {
-          homeScreenController.setSwitchModeManual();
-        },
-        child: Column(
+    return TextButton(
+      onPressed: () async {
+        await homeScreenController.setManualMode();
+      },
+      child: Obx(
+        () => Column(
           children: [
             Container(
                 padding: const EdgeInsets.all(16.0),

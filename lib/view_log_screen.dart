@@ -59,15 +59,15 @@ class _ViewLogScreenState extends State<ViewLogScreen> {
                           minWidth: 100,
                           columns: const [
                             DataColumn2(
-                              label: Text('Flow rate'),
-                              size: ColumnSize.L,
-                            ),
-                            DataColumn2(
                               label: Text('Date'),
                               size: ColumnSize.L,
                             ),
                             DataColumn2(
                               label: Text('Time'),
+                              size: ColumnSize.L,
+                            ),
+                            DataColumn2(
+                              label: Text('Flow rate'),
                               size: ColumnSize.L,
                             ),
                           ],
@@ -76,15 +76,15 @@ class _ViewLogScreenState extends State<ViewLogScreen> {
                               (index) => DataRow(cells: [
                                     DataCell(
                                       Text(
-                                          '${viewLogController.viewLogs[index].val}'),
-                                    ),
-                                    DataCell(
-                                      Text(
                                           '${viewLogController.viewLogs[index].date}'),
                                     ),
                                     DataCell(
                                       Text(
                                           '${viewLogController.viewLogs[index].time}'),
+                                    ),
+                                    DataCell(
+                                      Text(
+                                          '${viewLogController.viewLogs[index].val}'),
                                     ),
                                   ]))),
                     )),
