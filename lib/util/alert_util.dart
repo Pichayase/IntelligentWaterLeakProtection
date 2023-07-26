@@ -18,9 +18,12 @@ class AlertUtil {
         right: 20,
         bottom: 10,
       ),
-      content: Text(
-        message,
-        textAlign: TextAlign.center,
+      content: SingleChildScrollView(
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+          maxLines: 10,
+        ),
       ),
       cancel: (showCloseButton == true)
           ? TextButton(

@@ -20,4 +20,8 @@ class Endpoint {
   Uri getAutoMode() {
     return Uri.parse('$baseUrl/AutoMode');
   }
+
+  Uri resetAlert() {
+    return Uri.parse('$baseUrl/resetAlert');
+  }
 }

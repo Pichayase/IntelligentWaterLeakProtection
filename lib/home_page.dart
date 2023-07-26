@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:valve_controller/controller/home_controller.dart';
 import 'package:valve_controller/util/alert_util.dart';
-import 'package:valve_controller/util/exception_handler.dart';
+import 'package:http/http.dart' as http;
 import 'package:valve_controller/view_log_screen.dart';
 
 DateTime scheduleTime = DateTime.now();
@@ -63,7 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 20),
                   _buttonSwicthOnOff(),
                   _buttonSwicthMode(),
-                  _buttonSwicthLog()
+                  _buttonSwicthLog(),
+                  getCheckStatus()
                 ]
               ],
             ),
@@ -276,5 +277,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Widget getCheckStatus() {
+    return TextButton(
+        onPressed: () async {
+          // var client = http.Client();
+          // await client
+          //     .get(Uri.http('sqlbytnn.000webhostapp.com', 'resetAlert'));
+          homeScreenController.getCheckStatusNotify();
+        },
+        child: Text('-- Check status notify --'));
   }
 }
