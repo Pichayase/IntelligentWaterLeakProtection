@@ -86,7 +86,6 @@ Future<void> _isAndroidPermissionGranted() async {
     if (configuration.valveStatus == 0 &&
         configuration.functionMode == 0 &&
         configuration.alertStatus == 1) {
-      var client = http.Client();
       await client.get(Uri.http('sqlbytnn.000webhostapp.com', 'resetAlert'));
       await _showNotificationWithDefaultSound(flip);
     }
@@ -107,10 +106,7 @@ Future<void> _showNotificationWithDefaultSound(flip) async {
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics);
 
-  await flip.show(
-      0,
-      'GeeksforGeeks',
-      'Your are one step away to connect with GeeksforGeeks',
+  await flip.show(0, 'Alert', 'The system detects abnormal water flow',
       platformChannelSpecifics,
       payload: 'Default_Sound');
 }
