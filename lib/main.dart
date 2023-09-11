@@ -51,7 +51,7 @@ void main() {
     // Android will automatically change
     // your frequency to 15 min
     // if you have configured a lower frequency.
-    frequency: Duration(minutes: 15),
+    frequency: Duration(minutes: 2),
   );
 
   runApp(const MyApp());
@@ -83,7 +83,7 @@ Future<void> _isAndroidPermissionGranted() async {
 
     var json = jsonDecode(response.body);
     final Configuration configuration = Configuration.fromJson(json);
-    if (configuration.valveStatus == 0 &&
+    if (configuration.valveStatus == 1 &&
         configuration.functionMode == 0 &&
         configuration.alertStatus == 1) {
       await client.get(Uri.http('sqlbytnn.000webhostapp.com', 'resetAlert'));
